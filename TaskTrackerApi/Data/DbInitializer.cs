@@ -23,7 +23,6 @@ namespace TaskTrackerApi.Data
                     Title = "Setup database",
                     Description = "Create database schema and tables",
                     Status = MyTask.TaskStatus.doing,
-                    Priority = "high",
                     DueDate = DateTime.Now.AddDays(7),
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
@@ -33,7 +32,6 @@ namespace TaskTrackerApi.Data
                     Title = "Implement user authentication",
                     Description = "Add user authentication functionality",
                     Status = MyTask.TaskStatus.todo,
-                    Priority = "medium",
                     DueDate = DateTime.Now.AddDays(14),
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow

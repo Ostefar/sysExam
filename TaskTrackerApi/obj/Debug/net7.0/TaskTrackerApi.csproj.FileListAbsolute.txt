@@ -31,3 +31,6 @@ C:\Users\emil_\OneDrive\Dokumenter\Skole\sysExam\TaskTrackerApi\obj\Debug\net7.0
 C:\Users\emil_\OneDrive\Dokumenter\Skole\sysExam\TaskTrackerApi\obj\Debug\net7.0\TaskTrackerApi.pdb
 C:\Users\emil_\OneDrive\Dokumenter\Skole\sysExam\TaskTrackerApi\obj\Debug\net7.0\TaskTrackerApi.genruntimeconfig.cache
 C:\Users\emil_\OneDrive\Dokumenter\Skole\sysExam\TaskTrackerApi\obj\Debug\net7.0\ref\TaskTrackerApi.dll
+C:\Users\emil_\OneDrive\Dokumenter\Skole\sysExam\TaskTrackerApi\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.dll
+C:\Users\emil_\OneDrive\Dokumenter\Skole\sysExam\TaskTrackerApi\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+C:\Users\emil_\OneDrive\Dokumenter\Skole\sysExam\TaskTrackerApi\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.InMemory.dll
