@@ -1,6 +1,18 @@
+using Microsoft.EntityFrameworkCore;
+using TaskTrackerApi.Data;
+using TaskTrackerApi.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddDbContext<TaskApiContext>(opt => opt.UseInMemoryDatabase("TaskDb"));
+
+// Register repositories for dependency injection
+builder.Services.AddScoped<IRepository<MyTask>, TaskRepository>();
+
+// Register database initializer for dependency injection
+builder.Services.AddTransient<IDbInitializer, DbInitializer>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -14,6 +26,21 @@ var app = builder.Build();
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+
+app.UseCors(config => config
+    .AllowAnyOrigin()
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+);
+
+// Initialize the database.
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var dbContext = services.GetService<TaskApiContext>();
+    var dbInitializer = services.GetService<IDbInitializer>();
+    dbInitializer.Initialize(dbContext);
 }
 
 //app.UseHttpsRedirection();
