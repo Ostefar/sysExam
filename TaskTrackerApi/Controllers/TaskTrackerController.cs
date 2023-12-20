@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TaskTrackerApi.Data;
@@ -21,16 +22,16 @@ namespace TaskTrackerApi.Controllers
 
         // GET: api/TaskTracker
         [HttpGet]
-        public IEnumerable<MyTask> GetTasks()
+        public async Task<IEnumerable<MyTask>> GetTasks()
         {
-            return _context.Tasks.ToList();
+            return await _context.Tasks.ToListAsync();
         }
 
         // GET: api/TaskTracker/5
         [HttpGet("{id}")]
-        public ActionResult<MyTask> GetTask(int id)
+        public async Task<ActionResult<MyTask>> GetTask(int id)
         {
-            var task = _context.Tasks.Find(id);
+            var task = await _context.Tasks.FindAsync(id);
 
             if (task == null)
             {
@@ -42,20 +43,21 @@ namespace TaskTrackerApi.Controllers
 
         // POST: api/TaskTracker
         [HttpPost]
-        public ActionResult<MyTask> CreateTask(MyTask task)
+        public async Task<ActionResult<MyTask>> CreateTask(MyTask task)
         {
+            // tilføj if check om user id existere
             task.CreatedAt = DateTime.UtcNow;
             task.UpdatedAt = DateTime.UtcNow;
 
             _context.Tasks.Add(task);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetTask", new { id = task.Id }, task);
         }
 
         // PUT: api/TaskTracker/5
         [HttpPut("{id}")]
-        public IActionResult UpdateTask(int id, MyTask task)
+        public async Task<IActionResult> UpdateTask(int id, MyTask task)
         {
             if (id != task.Id)
             {
@@ -67,7 +69,7 @@ namespace TaskTrackerApi.Controllers
 
             try
             {
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -86,9 +88,9 @@ namespace TaskTrackerApi.Controllers
 
         // DELETE: api/TaskTracker/5
         [HttpDelete("{id}")]
-        public ActionResult<MyTask> DeleteTask(int id)
+        public async Task<ActionResult<MyTask>> DeleteTask(int id)
         {
-            var task = _context.Tasks.Find(id);
+            var task = await _context.Tasks.FindAsync(id);
 
             if (task == null)
             {
@@ -96,7 +98,7 @@ namespace TaskTrackerApi.Controllers
             }
 
             _context.Tasks.Remove(task);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return task;
         }
