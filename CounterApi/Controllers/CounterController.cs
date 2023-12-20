@@ -1,7 +1,10 @@
-﻿using CounterApi.Data;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using CounterApi.Data;
 using CounterApi.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CounterApi.Controllers
 {
@@ -18,9 +21,9 @@ namespace CounterApi.Controllers
 
         // GET: api/Counter
         [HttpGet]
-        public IEnumerable<MyCount> GetTasks()
+        public async Task<IEnumerable<MyCount>> GetTasks()
         {
-            return _context.MyCounts.ToList();
+            return await _context.MyCounts.ToListAsync();
         }
     }
 }
