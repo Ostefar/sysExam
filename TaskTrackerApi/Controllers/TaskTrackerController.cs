@@ -115,11 +115,14 @@ namespace TaskTrackerApi.Controllers
             // ny status
             // ny timestamp
             task.UpdatedAt = DateTime.UtcNow;
+
+            var test = task.Status.ToString();
+
             //send message med userId og topic alt efter status
 
-            if(task.Status.Equals("todo"))
+            if (test == "doing")
             {
-                Console.WriteLine("Complted task updated");
+                task.Status = MyTask.TaskStatus.completed;
 
             }
 
@@ -128,6 +131,8 @@ namespace TaskTrackerApi.Controllers
                 Console.WriteLine("Complted task updated");
             }
             Console.WriteLine("Complted task updated");
+            _context.Entry(task).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
 
             //If userId ->
             // If task.status = todo -> 
