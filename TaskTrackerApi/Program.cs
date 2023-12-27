@@ -1,10 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using TaskTrackerApi.Data;
+using TaskTrackerApi.Infrastructure;
 using TaskTrackerApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 // Add services to the container.
+string cloudAMQPConnectionString = "host=rabbitmq";
+builder.Services.AddSingleton<IMessagePublisher>(new MessagePublisher(cloudAMQPConnectionString));
+
 
 builder.Services.AddDbContext<TaskApiContext>(opt => opt.UseInMemoryDatabase("TaskDb"));
 

@@ -13,10 +13,10 @@
 
         public enum TaskStatus
         {
-            cancelled, 
-            completed, 
-            todo, 
-            doing 
+            todo,
+            doing,
+            completed,
+            cancelled
         }
     }
 }

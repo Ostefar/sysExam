@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskTrackerApi", "TaskTrack
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserApi", "UserApi\UserApi.csproj", "{69A55E91-030E-406F-8CA3-BC4AB86EDCC8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedModels", "SharedModels\SharedModels.csproj", "{DDF8A9FB-5385-4942-860F-0F5165AD90F2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{69A55E91-030E-406F-8CA3-BC4AB86EDCC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69A55E91-030E-406F-8CA3-BC4AB86EDCC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69A55E91-030E-406F-8CA3-BC4AB86EDCC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDF8A9FB-5385-4942-860F-0F5165AD90F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDF8A9FB-5385-4942-860F-0F5165AD90F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDF8A9FB-5385-4942-860F-0F5165AD90F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDF8A9FB-5385-4942-860F-0F5165AD90F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
