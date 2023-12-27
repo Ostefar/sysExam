@@ -8,7 +8,7 @@
         public int TasksToDo { get; set; } //update by messaging
         public int TasksDoing { get; set; } //update by messaging
         public int TasksDone { get; set; } // update by messaging
-        public int TasksThrown { get; set; } // update by messaging from TaskTrackerController
+        public int TasksThrown { get; set; } // update by messaging from TaskTrackerController gg
         public string UserName { get; set; }
         public string Password { get; set; }
         public string Email { get; set; }   
