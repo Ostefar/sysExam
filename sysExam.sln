@@ -5,9 +5,7 @@ VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskTrackerApi", "TaskTrackerApi\TaskTrackerApi.csproj", "{37ED012F-B8C4-4C64-B1D7-073E8D6E7889}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CounterApi", "CounterApi\CounterApi.csproj", "{5C3B0C47-8D17-4AAC-B0B0-F96503A9FBBF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserApi", "UserApi\UserApi.csproj", "{69A55E91-030E-406F-8CA3-BC4AB86EDCC8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserApi", "UserApi\UserApi.csproj", "{69A55E91-030E-406F-8CA3-BC4AB86EDCC8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +17,6 @@ Global
 		{37ED012F-B8C4-4C64-B1D7-073E8D6E7889}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37ED012F-B8C4-4C64-B1D7-073E8D6E7889}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37ED012F-B8C4-4C64-B1D7-073E8D6E7889}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5C3B0C47-8D17-4AAC-B0B0-F96503A9FBBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5C3B0C47-8D17-4AAC-B0B0-F96503A9FBBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5C3B0C47-8D17-4AAC-B0B0-F96503A9FBBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5C3B0C47-8D17-4AAC-B0B0-F96503A9FBBF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{69A55E91-030E-406F-8CA3-BC4AB86EDCC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{69A55E91-030E-406F-8CA3-BC4AB86EDCC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69A55E91-030E-406F-8CA3-BC4AB86EDCC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
