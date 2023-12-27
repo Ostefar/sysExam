@@ -14,9 +14,6 @@ namespace TaskTrackerApi.Data
 
         public async Task<MyTask> AddAsync(MyTask entity)
         {
-           // if (entity.Date == null)
-             //   entity.Date = DateTime.Now;
-
             var newTask = await db.Tasks.AddAsync(entity);
             await db.SaveChangesAsync();
             return newTask.Entity;

@@ -45,7 +45,13 @@ namespace TaskTrackerApi.Controllers
         [HttpPost]
         public async Task<ActionResult<MyTask>> CreateTask(MyTask task)
         {
-            // tilføj if check om user id existere
+            /*
+            // Add validation for UserId existence - needs to get the user first
+            if (!_context.Users.Any(u => u.Id == task.UserId))
+            {
+                return BadRequest("Invalid UserId");
+            }
+            */
             task.CreatedAt = DateTime.UtcNow;
             task.UpdatedAt = DateTime.UtcNow;
 
@@ -63,6 +69,13 @@ namespace TaskTrackerApi.Controllers
             {
                 return BadRequest();
             }
+            /*
+                // Add validation for UserId existence - needs to get the user first
+            if (!_context.Users.Any(u => u.Id == task.UserId))
+            {
+                return BadRequest("Invalid UserId");
+            }
+            */
 
             task.UpdatedAt = DateTime.UtcNow;
             _context.Entry(task).State = EntityState.Modified;
