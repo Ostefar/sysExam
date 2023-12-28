@@ -17,10 +17,7 @@ namespace TaskTrackerApi.Models
                 Password = sharedUser.Password,
                 Email = sharedUser.Email,
                 Phone = sharedUser.Phone,
-                TasksToDo = sharedUser.TasksToDo,
-                TasksDoing = sharedUser.TasksDoing,
-                TasksDone = sharedUser.TasksDone,
-                TasksThrown = sharedUser.TasksThrown,
+                TasksMoved = sharedUser.TasksMoved
             };
         }
 
@@ -35,10 +32,7 @@ namespace TaskTrackerApi.Models
                 Password = hiddenUser.Password,
                 Email = hiddenUser.Email,
                 Phone = hiddenUser.Phone,
-                TasksToDo = hiddenUser.TasksToDo,
-                TasksDoing = hiddenUser.TasksDoing,
-                TasksDone = hiddenUser.TasksDone,
-                TasksThrown = hiddenUser.TasksThrown,
+                TasksMoved = hiddenUser.TasksMoved
             };
         }
     }

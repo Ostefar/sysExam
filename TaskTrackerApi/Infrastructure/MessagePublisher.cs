@@ -20,12 +20,11 @@ namespace TaskTrackerApi.Infrastructure
             bus.Dispose();
         }
 
-        public void PublishTaskStatusChangedMessage(int userId, string currentStatus, string topic)
+        public void PublishTaskStatusChangedMessage(int userId, string topic)
         {
             var message = new TaskStatusChangedMessage
             {
                 UserId = userId,
-                CurrentStatus = currentStatus,
             };
 
             bus.PubSub.Publish(message, topic);

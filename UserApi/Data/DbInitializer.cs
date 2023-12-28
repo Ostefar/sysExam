@@ -25,8 +25,7 @@ namespace UserApi.Data
                     UserName = "sysInt",
                     Password = "1234",
                     Email = "Emil@email.dk",
-                    Phone = "45454545",
-                    TasksToDo = 1
+                    Phone = "45454545"
                 },
                 new MyUser
                 {
@@ -35,8 +34,7 @@ namespace UserApi.Data
                     UserName = "sysMas",
                     Password = "5678",
                     Email = "Ghidotti@mail.dk",
-                    Phone = "46464646",
-                    TasksToDo = 1
+                    Phone = "46464646"
                 }
             };
 

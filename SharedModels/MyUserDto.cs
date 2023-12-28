@@ -13,10 +13,7 @@ namespace SharedModels
         public string Password { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
-        public int TasksToDo { get; set; }
-        public int TasksDoing { get; set; }
-        public int TasksDone { get; set; }
-        public int TasksThrown { get; set; }
+        public int TasksMoved { get; set; }
 
     }
 }

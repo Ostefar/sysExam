@@ -5,6 +5,6 @@ namespace TaskTrackerApi.Infrastructure
 {
     public interface IMessagePublisher
     {
-        void PublishTaskStatusChangedMessage(int userId, string currentStatus, string topic);
+        void PublishTaskStatusChangedMessage(int userId, string topic);
     }
 }

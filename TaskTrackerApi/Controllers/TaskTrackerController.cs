@@ -70,9 +70,6 @@ namespace TaskTrackerApi.Controllers
 
             var newTask = await repository.AddAsync(task);
 
-            _messagePublisher.PublishTaskStatusChangedMessage(
-                   task.UserId, task.Status.ToString(), "todo");
-
             return CreatedAtRoute("GetTask", new { id = newTask.Id },
                 taskConverter.Convert(newTask));
         }
@@ -92,15 +89,10 @@ namespace TaskTrackerApi.Controllers
                 return NotFound();
             }
 
-            modifiedTask.Title = taskDto.Title;
-            modifiedTask.Description = taskDto.Description;
-            modifiedTask.UserId = taskDto.UserId;
-            modifiedTask.Status = (MyTask.TaskStatus)taskDto.Status;
-            modifiedTask.DueDate = taskDto.DueDate;
             modifiedTask.UpdatedAt = DateTime.Now;
 
             _messagePublisher.PublishTaskStatusChangedMessage(
-                  modifiedTask.UserId, modifiedTask.Status.ToString(), "thrown");
+                  modifiedTask.UserId, "moved");
 
             await repository.EditAsync(modifiedTask);
             return new NoContentResult();
@@ -116,42 +108,8 @@ namespace TaskTrackerApi.Controllers
                 return NotFound();
             }
 
-            _messagePublisher.PublishTaskStatusChangedMessage(
-                   task.UserId, currentStatus, "thrown");
-
             await repository.RemoveAsync(id);
             return new NoContentResult();
         }
-/*
-        private void UpdateUserTasks(string status, int userId)
-        {
-            if (status is not null)
-            {
-                if (status == "todo")
-                {
-                    _messagePublisher.PublishTaskStatusChangedMessage(
-                   userId, "todo");
-                }
-                else if (status == "doing")
-                {
-                    _messagePublisher.PublishTaskStatusChangedMessage(
-                   userId, "doing");
-                }
-                else if (status == "done")
-                {
-                    _messagePublisher.PublishTaskStatusChangedMessage(
-                  userId, "done");
-                }
-                else if (status == "thrown")
-                {
-                    _messagePublisher.PublishTaskStatusChangedMessage(
-                   userId, "thrown");
-                }
-            }
-            else
-            {
-                Console.WriteLine("status is empty");
-            }
-        }*/
     }
 }
