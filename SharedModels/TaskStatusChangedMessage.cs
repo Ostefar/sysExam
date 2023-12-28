@@ -7,5 +7,7 @@ namespace SharedModels
     {
         public int UserId { get; set; }
 
+        public string CurrentStatus { get; set; }
+
     }
 }

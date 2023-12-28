@@ -70,6 +70,9 @@ namespace TaskTrackerApi.Controllers
 
             var newTask = await repository.AddAsync(task);
 
+            _messagePublisher.PublishTaskStatusChangedMessage(
+                   task.UserId, task.Status.ToString(), "todo");
+
             return CreatedAtRoute("GetTask", new { id = newTask.Id },
                 taskConverter.Convert(newTask));
         }
@@ -96,53 +99,30 @@ namespace TaskTrackerApi.Controllers
             modifiedTask.DueDate = taskDto.DueDate;
             modifiedTask.UpdatedAt = DateTime.Now;
 
-            UpdateUserTasks(modifiedTask.Status.ToString(), modifiedTask.UserId);
+            _messagePublisher.PublishTaskStatusChangedMessage(
+                  modifiedTask.UserId, modifiedTask.Status.ToString(), "thrown");
 
             await repository.EditAsync(modifiedTask);
             return new NoContentResult();
         }
 
-
-
-
-
-
-
-        /*
-           _messagePublisher.PublishOrderStatusChangedMessage(
-                       order.CustomerId, order.OrderLines, "payed");
-         */
-
-
-
-
-
-        //Put update task status ToDo
-        //Update timestamp for update 
-        //Send message to update user on UserId to increment User's ToDo counter 
-
-        //Put update task status Doing
-        //Send message to update user on UserId to increment User's Doing counter
-
-        //Put update task status Done
-        //Send message to update user on UserId to increment User's Done counter
-
-        //Put update task status Thrown
-        //Send message to update user on UserId to increment User's Thrown counter
-
-
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
+            var task = await repository.GetAsync(id);
+            var currentStatus = task.Status.ToString();
             if (await repository.GetAsync(id) == null)
             {
                 return NotFound();
             }
 
+            _messagePublisher.PublishTaskStatusChangedMessage(
+                   task.UserId, currentStatus, "thrown");
+
             await repository.RemoveAsync(id);
             return new NoContentResult();
         }
-
+/*
         private void UpdateUserTasks(string status, int userId)
         {
             if (status is not null)
@@ -172,6 +152,6 @@ namespace TaskTrackerApi.Controllers
             {
                 Console.WriteLine("status is empty");
             }
-        }
+        }*/
     }
 }

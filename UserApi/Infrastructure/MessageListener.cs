@@ -57,8 +57,24 @@ namespace UserApi.Infrastructure
                 var userRepos = services.GetService<IRepository<MyUser>>();
 
                 var user = await userRepos.GetAsync(message.UserId);
-                user.TasksToDo = -1;
-                user.TasksDoing = +1;
+
+                // disse værdier i hver function er pt hardcoded, burde modtage status så den trækker fra der hvor den har været tidligere.
+                if (message.CurrentStatus == "todo")
+                {
+                    user.TasksToDo--;
+                }
+                else if (message.CurrentStatus == "doing")
+                {
+                    user.TasksDoing--;
+                }
+                else if (message.CurrentStatus == "done")
+                {
+                    user.TasksDone--;
+                }
+                else if (message.CurrentStatus == null)
+                { 
+                }
+                user.TasksToDo++;
 
 
                 await userRepos.EditAsync(user);
@@ -73,8 +89,20 @@ namespace UserApi.Infrastructure
                 var userRepos = services.GetService<IRepository<MyUser>>();
 
                 var user = await userRepos.GetAsync(message.UserId);
-                user.TasksToDo = -1;
-                user.TasksDoing = +1;
+
+                if (message.CurrentStatus == "todo")
+                {
+                    user.TasksToDo--;
+                }
+                else if (message.CurrentStatus == "doing")
+                {
+                    user.TasksDoing--;
+                }
+                else if (message.CurrentStatus == "done")
+                {
+                    user.TasksDone--;
+                }
+                user.TasksDoing++;
 
            
                 await userRepos.EditAsync(user);
@@ -90,8 +118,19 @@ namespace UserApi.Infrastructure
 
                 var user = await userRepos.GetAsync(message.UserId);
 
-                user.TasksDoing = -1;
-                user.TasksDone = +1;
+                if (message.CurrentStatus == "todo")
+                {
+                    user.TasksToDo--;
+                }
+                else if (message.CurrentStatus == "doing")
+                {
+                    user.TasksDoing--;
+                }
+                else if (message.CurrentStatus == "done")
+                {
+                    user.TasksDone--;
+                }
+                user.TasksDone++;
 
                 await userRepos.EditAsync(user);
             }
@@ -105,9 +144,21 @@ namespace UserApi.Infrastructure
                 var userRepos = services.GetService<IRepository<MyUser>>();
 
                 var user = await userRepos.GetAsync(message.UserId);
-                
-                user.TasksToDo = -1;
-                user.TasksDoing = +1;
+
+                if (message.CurrentStatus == "todo")
+                {
+                    user.TasksToDo--;
+                }
+                else if (message.CurrentStatus == "doing")
+                { 
+                    user.TasksDoing--;
+                }
+                else if (message.CurrentStatus == "done")
+                {
+                    user.TasksDone--;
+                }
+
+                user.TasksThrown++;
 
 
                 await userRepos.EditAsync(user);
