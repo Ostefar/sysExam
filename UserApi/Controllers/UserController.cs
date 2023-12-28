@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SharedModels;
+using TaskTrackerApi.Models;
 using UserApi.Data;
 using UserApi.Models;
 
@@ -13,95 +15,85 @@ namespace UserApi.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        private readonly IRepository<MyUser> repository;
+        private readonly IConverter<MyUser, MyUserDto> userConverter;
         private readonly UserApiContext _context;
 
-        public UserController(UserApiContext context)
+        public UserController(IRepository<MyUser> repos, IConverter<MyUser, MyUserDto> converter, UserApiContext context)
         {
+            repository = repos;
+            userConverter = converter;
             _context = context;
         }
 
-        // GET: api/User
         [HttpGet]
-        public async Task<IEnumerable<MyUser>> GetUsers()
+        public async Task<IEnumerable<MyUserDto>> GetUsers()
         {
-            return await _context.Users.ToListAsync();
+            var userDtoList = new List<MyUserDto>();
+            foreach (var user in await repository.GetAllAsync())
+            {
+                var userDto = userConverter.Convert(user);
+                userDtoList.Add(userDto);
+            }
+            return userDtoList;
         }
 
-        // GET: api/User/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<MyUser>> GetUser(int id)
+        [HttpGet("{id}", Name = "GetUser")]
+        public async Task<IActionResult> GetUser(int id)
         {
-            var user = await _context.Users.FindAsync(id);
-
+            var user = await repository.GetAsync(id);
             if (user == null)
             {
                 return NotFound();
             }
-
-            return user;
+            var userDto = userConverter.Convert(user);
+            return new ObjectResult(userDto);
         }
 
-        // POST: api/User
         [HttpPost]
-        public async Task<ActionResult<MyUser>> CreateUser(MyUser user)
+        public async Task<IActionResult> PostAsync([FromBody] MyUserDto userDto)
         {
-            // add some if check
-      
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
-        }
-
-        // PUT: api/User/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(int id, MyUser user)
-        {
-            if (id != user.Id)
+            if (userDto == null)
             {
                 return BadRequest();
             }
-            _context.Entry(user).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            var user = userConverter.Convert(userDto);
+            var newUser = await repository.AddAsync(user);
 
-            return NoContent();
+            return CreatedAtRoute("GetUser", new { id = newUser.Id },
+                userConverter.Convert(newUser));
         }
 
-        // DELETE: api/User/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<MyUser>> DeleteUser(int id)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutAsync(int id, [FromBody] MyUserDto userDto)
         {
-            var user = await _context.Users.FindAsync(id);
+            if (userDto == null || userDto.Id != id)
+            {
+                return BadRequest();
+            }
 
-            if (user == null)
+            var modifiedUser = await repository.GetAsync(id);
+
+            if (modifiedUser == null)
             {
                 return NotFound();
             }
 
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
-
-            return user;
+            await repository.EditAsync(modifiedUser);
+            return new NoContentResult();
         }
 
-        private bool UserExists(int id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAsync(int id)
         {
-            return _context.Users.Any(e => e.Id == id);
+            if (await repository.GetAsync(id) == null)
+            {
+                return NotFound();
+            }
+
+            await repository.RemoveAsync(id);
+            return new NoContentResult();
         }
     }
 }

@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using SharedModels;
+using TaskTrackerApi.Models;
 using UserApi.Data;
 using UserApi.Models;
+using static TaskTrackerApi.Models.UserConverter;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +16,9 @@ builder.Services.AddScoped<IRepository<MyUser>, UserRepository>();
 
 // Register database initializer for dependency injection
 builder.Services.AddTransient<IDbInitializer, DbInitializer>();
+
+// Register ProductConverter for dependency injection
+builder.Services.AddSingleton<IConverter<MyUser, MyUserDto>, UserConverter>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

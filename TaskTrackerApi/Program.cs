@@ -22,7 +22,7 @@ builder.Services.AddScoped<IRepository<MyTask>, TaskRepository>();
 builder.Services.AddTransient<IDbInitializer, DbInitializer>();
 
 // Register ProductConverter for dependency injection
-builder.Services.AddSingleton<IConverter<MyTask, MyTaskDto>, ProductConverter>();
+builder.Services.AddSingleton<IConverter<MyTask, MyTaskDto>, TaskConverter>();
 
 
 builder.Services.AddControllers();
