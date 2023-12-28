@@ -97,7 +97,8 @@ namespace TaskTrackerApi.Controllers
             {
                 return NotFound();
             }
-
+            modifiedTask.Title = taskDto.Title;
+            modifiedTask.Description = taskDto.Description;
             modifiedTask.UpdatedAt = DateTime.Now;
 
             _messagePublisher.PublishTaskStatusChangedMessage(
