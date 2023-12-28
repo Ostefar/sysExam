@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using SharedModels;
+using System.Reflection;
 using TaskTrackerApi.Models;
 using UserApi.Data;
 using UserApi.Infrastructure;
@@ -26,7 +28,12 @@ builder.Services.AddSingleton<IConverter<MyUser, MyUserDto>, UserConverter>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(
+    c =>
+    {
+        c.EnableAnnotations();
+        c.SwaggerDoc("v1", new OpenApiInfo { Title = "UserApi", Version = "v1" });
+    });
 
 var app = builder.Build();
 

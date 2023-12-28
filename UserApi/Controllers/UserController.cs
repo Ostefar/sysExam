@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SharedModels;
+using Swashbuckle.AspNetCore.Annotations;
 using TaskTrackerApi.Models;
 using UserApi.Data;
 using UserApi.Models;
@@ -26,7 +27,9 @@ namespace UserApi.Controllers
             _context = context;
         }
 
-        [HttpGet]
+        [HttpGet(Name = "GetUsers")]
+        [SwaggerOperation(Summary = "Gets a list of all users")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Request Successfull", typeof(IEnumerable<MyUserDto>))]
         public async Task<IEnumerable<MyUserDto>> GetUsers()
         {
             var userDtoList = new List<MyUserDto>();
@@ -39,6 +42,8 @@ namespace UserApi.Controllers
         }
 
         [HttpGet("{id}", Name = "GetUser")]
+        [SwaggerOperation(Summary = "Gets a specific user")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Request Successfull")]
         public async Task<IActionResult> GetUser(int id)
         {
             var user = await repository.GetAsync(id);
@@ -50,7 +55,9 @@ namespace UserApi.Controllers
             return new ObjectResult(userDto);
         }
 
-        [HttpPost]
+        [HttpPost(Name = "CreateUser")]
+        [SwaggerOperation(Summary = "Create a new user")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Request Successfull")]
         public async Task<IActionResult> PostAsync([FromBody] MyUserDto userDto)
         {
             if (userDto == null)
@@ -65,7 +72,9 @@ namespace UserApi.Controllers
                 userConverter.Convert(newUser));
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}", Name = "UpdateUser")]
+        [SwaggerOperation(Summary = "Update an existing user")]
+        [SwaggerResponse(StatusCodes.Status204NoContent, "Request Successfull")]
         public async Task<IActionResult> PutAsync(int id, [FromBody] MyUserDto userDto)
         {
             if (userDto == null || userDto.Id != id)
@@ -79,12 +88,21 @@ namespace UserApi.Controllers
             {
                 return NotFound();
             }
+            modifiedUser.FirstName = userDto.FirstName;
+            modifiedUser.LastName = userDto.LastName;
+            modifiedUser.UserName = userDto.UserName;
+            modifiedUser.Password = userDto.Password;
+            modifiedUser.Email = userDto.Email;
+            modifiedUser.Phone = userDto.Phone;
+
 
             await repository.EditAsync(modifiedUser);
             return new NoContentResult();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}", Name = "DeleteUser")]
+        [SwaggerOperation(Summary = "Delete an existing user")]
+        [SwaggerResponse(StatusCodes.Status204NoContent, "Request Successfull")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
             if (await repository.GetAsync(id) == null)

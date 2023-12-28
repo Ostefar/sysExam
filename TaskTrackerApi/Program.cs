@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using SharedModels;
 using TaskTrackerApi.Data;
 using TaskTrackerApi.Infrastructure;
@@ -33,7 +34,12 @@ builder.Services.AddSingleton<IMessagePublisher>(new MessagePublisher(rabbitmqCo
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(
+    c =>
+    {
+        c.EnableAnnotations();
+        c.SwaggerDoc("v1", new OpenApiInfo { Title = "TaskTrackerApi", Version = "v1" });
+    });
 
 var app = builder.Build();
 

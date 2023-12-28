@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SharedModels;
+using Swashbuckle.AspNetCore.Annotations;
 using TaskTrackerApi.Data;
 using TaskTrackerApi.Infrastructure;
 using TaskTrackerApi.Models;
@@ -31,7 +32,9 @@ namespace TaskTrackerApi.Controllers
 
         }
 
-        [HttpGet]
+        [HttpGet(Name = "GetTasks")]
+        [SwaggerOperation(Summary = "Gets a list of all tasks")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Request Successfull", typeof(IEnumerable<MyUserDto>))]
         public async Task<IEnumerable<MyTaskDto>> GetTasks()
         {
             var taskDtoList = new List<MyTaskDto>();
@@ -44,6 +47,8 @@ namespace TaskTrackerApi.Controllers
         }
 
         [HttpGet("{id}", Name = "GetTask")]
+        [SwaggerOperation(Summary = "Gets a specific task")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Request Successfull")]
         public async Task<IActionResult> GetTask(int id)
         {
             var task = await repository.GetAsync(id);
@@ -54,7 +59,9 @@ namespace TaskTrackerApi.Controllers
             var taskDto = taskConverter.Convert(task);
             return new ObjectResult(taskDto);
         }
-        [HttpPost]
+        [HttpPost(Name = "CreateTask")]
+        [SwaggerOperation(Summary = "Create a new task")]
+        [SwaggerResponse(StatusCodes.Status201Created, "Request Successfull created")]
         public async Task<IActionResult> PostAsync([FromBody] MyTaskDto taskDto)
         {
             if (taskDto == null)
@@ -74,7 +81,9 @@ namespace TaskTrackerApi.Controllers
                 taskConverter.Convert(newTask));
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}", Name = "UpdateTask")]
+        [SwaggerOperation(Summary = "Gets a specific task")]
+        [SwaggerResponse(StatusCodes.Status204NoContent, "Request Successfull updated")]
         public async Task<IActionResult> PutAsync(int id, [FromBody] MyTaskDto taskDto)
         {
             if (taskDto == null || taskDto.Id != id)
@@ -99,6 +108,8 @@ namespace TaskTrackerApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Deletes a specific task")]
+        [SwaggerResponse(StatusCodes.Status204NoContent, "Request Successfull updated")]
         public async Task<IActionResult> Delete(int id)
         {
             var task = await repository.GetAsync(id);
