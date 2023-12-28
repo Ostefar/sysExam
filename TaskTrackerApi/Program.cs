@@ -3,9 +3,10 @@ using SharedModels;
 using TaskTrackerApi.Data;
 using TaskTrackerApi.Infrastructure;
 using TaskTrackerApi.Models;
-using static TaskTrackerApi.Models.TaskConverter;
 
 var builder = WebApplication.CreateBuilder(args);
+
+string userServiceBaseUrl = "http://user-service/users/";
 
 // Add services to the container.
 string rabbitmqConn = "host=rabbitmq";
@@ -21,9 +22,13 @@ builder.Services.AddScoped<IRepository<MyTask>, TaskRepository>();
 // Register database initializer for dependency injection
 builder.Services.AddTransient<IDbInitializer, DbInitializer>();
 
-// Register ProductConverter for dependency injection
+// Register UserConverter for dependency injection
 builder.Services.AddSingleton<IConverter<MyTask, MyTaskDto>, TaskConverter>();
 
+// Register user service gateway for dependency injection
+builder.Services.AddSingleton<IServiceGateway<MyUserDto>>(new UserServiceGateway(userServiceBaseUrl));
+
+builder.Services.AddSingleton<IMessagePublisher>(new MessagePublisher(rabbitmqConn));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

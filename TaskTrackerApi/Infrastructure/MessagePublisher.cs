@@ -24,15 +24,10 @@ namespace TaskTrackerApi.Infrastructure
         {
             var message = new TaskStatusChangedMessage
             {
-                UserId = userId
+                UserId = userId,
             };
 
             bus.PubSub.Publish(message, topic);
-        }
-
-        public void PublishOrderStatusChangedMessage(int? customerId, IList<MyTask> orderLines, string topic)
-        {
-            throw new NotImplementedException();
         }
     }
 }

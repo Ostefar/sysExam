@@ -96,6 +96,8 @@ namespace TaskTrackerApi.Controllers
             modifiedTask.DueDate = taskDto.DueDate;
             modifiedTask.UpdatedAt = DateTime.Now;
 
+            UpdateUserTasks(modifiedTask.Status.ToString(), modifiedTask.UserId);
+
             await repository.EditAsync(modifiedTask);
             return new NoContentResult();
         }
@@ -139,6 +141,37 @@ namespace TaskTrackerApi.Controllers
 
             await repository.RemoveAsync(id);
             return new NoContentResult();
+        }
+
+        private void UpdateUserTasks(string status, int userId)
+        {
+            if (status is not null)
+            {
+                if (status == "todo")
+                {
+                    _messagePublisher.PublishTaskStatusChangedMessage(
+                   userId, "todo");
+                }
+                else if (status == "doing")
+                {
+                    _messagePublisher.PublishTaskStatusChangedMessage(
+                   userId, "doing");
+                }
+                else if (status == "done")
+                {
+                    _messagePublisher.PublishTaskStatusChangedMessage(
+                  userId, "done");
+                }
+                else if (status == "thrown")
+                {
+                    _messagePublisher.PublishTaskStatusChangedMessage(
+                   userId, "thrown");
+                }
+            }
+            else
+            {
+                Console.WriteLine("status is empty");
+            }
         }
     }
 }

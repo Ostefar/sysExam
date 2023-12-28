@@ -2,10 +2,13 @@ using Microsoft.EntityFrameworkCore;
 using SharedModels;
 using TaskTrackerApi.Models;
 using UserApi.Data;
+using UserApi.Infrastructure;
 using UserApi.Models;
 using static TaskTrackerApi.Models.UserConverter;
 
 var builder = WebApplication.CreateBuilder(args);
+
+string rabbitmqConn = "host=rabbitmq";
 
 // Add services to the container.
 
@@ -48,6 +51,10 @@ using (var scope = app.Services.CreateScope())
     var dbInitializer = services.GetService<IDbInitializer>();
     dbInitializer.Initialize(dbContext);
 }
+
+// Create a message listener in a separate thread.
+Task.Factory.StartNew(() =>
+    new MessageListener(app.Services, rabbitmqConn).Start());
 
 //app.UseHttpsRedirection();
 

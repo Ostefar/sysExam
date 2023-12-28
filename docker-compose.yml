@@ -1,0 +1,19 @@
+version: "3.9"
+
+services:
+  user-service:
+    build:
+      context: .
+      dockerfile: UserApi/Dockerfile
+    ports:
+    - 9001:80
+  task-service:
+    build:
+      context: .
+      dockerfile: TaskTrackerApi/Dockerfile
+    ports:
+    - 9002:80
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+    - "15673:15672"
