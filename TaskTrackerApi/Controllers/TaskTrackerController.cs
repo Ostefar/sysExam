@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SharedModels;
 using TaskTrackerApi.Data;
 using TaskTrackerApi.Infrastructure;
 using TaskTrackerApi.Models;
+using static TaskTrackerApi.Models.TaskConverter;
 
 namespace TaskTrackerApi.Controllers
 {
@@ -15,154 +17,92 @@ namespace TaskTrackerApi.Controllers
     public class TaskTrackerController : ControllerBase
     {
         private readonly TaskApiContext _context;
+        private readonly IRepository<MyTask> repository;
         private readonly IMessagePublisher _messagePublisher;
+        private readonly IConverter<MyTask, MyTaskDto> taskConverter;
 
 
-        public TaskTrackerController(TaskApiContext context)
+        public TaskTrackerController(IRepository<MyTask> repos, TaskApiContext context, IMessagePublisher messagePublisher, IConverter<MyTask, MyTaskDto> converter)
         {
+            repository = repos;
             _context = context;
+            _messagePublisher = messagePublisher;
+            taskConverter = converter;
+
         }
 
-        // GET: api/TaskTracker
         [HttpGet]
-        public async Task<IEnumerable<MyTask>> GetTasks()
+        public async Task<IEnumerable<MyTaskDto>> GetTasks()
         {
-            return await _context.Tasks.ToListAsync();
+            var taskDtoList = new List<MyTaskDto>();
+            foreach (var task in await repository.GetAllAsync())
+            {
+                var taskDto = taskConverter.Convert(task);
+                taskDtoList.Add(taskDto);
+            }
+            return taskDtoList;
         }
 
-        // GET: api/TaskTracker/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<MyTask>> GetTask(int id)
+        [HttpGet("{id}", Name = "GetTask")]
+        public async Task<IActionResult> GetTask(int id)
         {
-            var task = await _context.Tasks.FindAsync(id);
-
+            var task = await repository.GetAsync(id);
             if (task == null)
             {
                 return NotFound();
             }
-
-            return task;
+            var taskDto = taskConverter.Convert(task);
+            return new ObjectResult(taskDto);
         }
-
-        // POST: api/TaskTracker
         [HttpPost]
-        public async Task<ActionResult<MyTask>> CreateTask(MyTask task)
+        public async Task<IActionResult> PostAsync([FromBody] MyTaskDto taskDto)
         {
-            /*
-            // Add validation for UserId existence - needs to get the user first
-            if (!_context.Users.Any(u => u.Id == task.UserId))
-            {
-                return BadRequest("Invalid UserId");
-            }
-            */
-            task.CreatedAt = DateTime.UtcNow;
-            task.UpdatedAt = DateTime.UtcNow;
-
-            _context.Tasks.Add(task);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetTask", new { id = task.Id }, task);
-        }
-
-        // PUT: api/TaskTracker/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTask(int id, MyTask task) //ADD user ID
-        {
-            if (id != task.Id)
+            if (taskDto == null)
             {
                 return BadRequest();
             }
 
-    
+            var task = taskConverter.Convert(taskDto);
+            task.Status = 0; //todo also the starting point
+            task.DueDate = DateTime.Now.AddDays(45);
+            task.CreatedAt = DateTime.Now;
+            task.UpdatedAt = DateTime.Now;
 
-            /*
-                // Add validation for UserId existence - needs to get the user first
-            if (!_context.Users.Any(u => u.Id == task.UserId))
-            {
-                return BadRequest("Invalid UserId");
-            }
-            */
+            var newTask = await repository.AddAsync(task);
 
-            task.UpdatedAt = DateTime.UtcNow;
-            
-            _context.Entry(task).State = EntityState.Modified;
-
-            try
-            {
-                //use massing to update user 
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TaskExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return CreatedAtRoute("GetTask", new { id = newTask.Id },
+                taskConverter.Convert(newTask));
         }
 
-        //UpdateTaskStatus{ID}
-        [HttpPut("UpdateTaskStatus/{id}")]
-        public async Task<IActionResult> UpdateTaskStatus(MyTask task) //ADD user ID
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutAsync(int id, [FromBody] MyTaskDto taskDto)
         {
-            // opdater selveste tasken med:
-            // ny status
-            // ny timestamp
-            task.UpdatedAt = DateTime.UtcNow;
-
-            var test = task.Status.ToString();
-
-            //send message med userId og topic alt efter status
-
-            if (test == "doing")
+            if (taskDto == null || taskDto.Id != id)
             {
-                task.Status = MyTask.TaskStatus.completed;
-
+                return BadRequest();
             }
 
-            if (task.Status.Equals("completed"))
+            var modifiedTask = await repository.GetAsync(id);
+
+            if (modifiedTask == null)
             {
-                Console.WriteLine("Complted task updated");
+                return NotFound();
             }
-            Console.WriteLine("Complted task updated");
-            _context.Entry(task).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
 
-            //If userId ->
-            // If task.status = todo -> 
-            //Increment user's todo counter using messaging 
+            modifiedTask.Title = taskDto.Title;
+            modifiedTask.Description = taskDto.Description;
+            modifiedTask.UserId = taskDto.UserId;
+            modifiedTask.Status = (MyTask.TaskStatus)taskDto.Status;
+            modifiedTask.DueDate = taskDto.DueDate;
+            modifiedTask.UpdatedAt = DateTime.Now;
 
-            // If task.status = doing -> 
-            //Increment user's doing counter using messaging 
-
-            // If task.status = done -> 
-            //Increment user's done counter 
-
-            // If task.status = thrown -> 
-            //Increment user's thrown counter
-
-
-            //_messagePublisher.PublishTaskStatusChangedMessage(
-            //           id, "payed");
-            /*
-                // Add validation for UserId existence - needs to get the user first
-            if (!_context.Users.Any(u => u.Id == task.UserId))
-            {
-                return BadRequest("Invalid UserId");
-            }
-            */
-
-
-
-            return NoContent();
+            await repository.EditAsync(modifiedTask);
+            return new NoContentResult();
         }
-     
+
+
+
+
 
 
 
@@ -189,27 +129,16 @@ namespace TaskTrackerApi.Controllers
         //Send message to update user on UserId to increment User's Thrown counter
 
 
-
-        // DELETE: api/TaskTracker/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<MyTask>> DeleteTask(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var task = await _context.Tasks.FindAsync(id);
-
-            if (task == null)
+            if (await repository.GetAsync(id) == null)
             {
                 return NotFound();
             }
 
-            _context.Tasks.Remove(task);
-            await _context.SaveChangesAsync();
-
-            return task;
-        }
-
-        private bool TaskExists(int id)
-        {
-            return _context.Tasks.Any(e => e.Id == id);
+            await repository.RemoveAsync(id);
+            return new NoContentResult();
         }
     }
 }

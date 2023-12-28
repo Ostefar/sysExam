@@ -1,14 +1,16 @@
 using Microsoft.EntityFrameworkCore;
+using SharedModels;
 using TaskTrackerApi.Data;
 using TaskTrackerApi.Infrastructure;
 using TaskTrackerApi.Models;
+using static TaskTrackerApi.Models.TaskConverter;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 // Add services to the container.
-string cloudAMQPConnectionString = "host=rabbitmq";
-builder.Services.AddSingleton<IMessagePublisher>(new MessagePublisher(cloudAMQPConnectionString));
+string rabbitmqConn = "host=rabbitmq";
+
+builder.Services.AddSingleton<IMessagePublisher>(new MessagePublisher(rabbitmqConn));
 
 
 builder.Services.AddDbContext<TaskApiContext>(opt => opt.UseInMemoryDatabase("TaskDb"));
@@ -18,6 +20,10 @@ builder.Services.AddScoped<IRepository<MyTask>, TaskRepository>();
 
 // Register database initializer for dependency injection
 builder.Services.AddTransient<IDbInitializer, DbInitializer>();
+
+// Register ProductConverter for dependency injection
+builder.Services.AddSingleton<IConverter<MyTask, MyTaskDto>, ProductConverter>();
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
