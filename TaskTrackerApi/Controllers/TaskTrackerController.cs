@@ -82,7 +82,7 @@ namespace TaskTrackerApi.Controllers
         }
 
         [HttpPut("{id}", Name = "UpdateTask")]
-        [SwaggerOperation(Summary = "Gets a specific task")]
+        [SwaggerOperation(Summary = "Update an existing task")]
         [SwaggerResponse(StatusCodes.Status204NoContent, "Request Successfull updated")]
         public async Task<IActionResult> PutAsync(int id, [FromBody] MyTaskDto taskDto)
         {
