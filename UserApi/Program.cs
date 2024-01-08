@@ -28,12 +28,39 @@ builder.Services.AddSingleton<IConverter<MyUser, MyUserDto>, UserConverter>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(
+/*builder.Services.AddSwaggerGen(
     c =>
     {
         c.EnableAnnotations();
         c.SwaggerDoc("v1", new OpenApiInfo { Title = "UserApi", Version = "v1" });
+    });*/
+
+
+
+    builder.Services.AddSwaggerGen(c =>
+    {
+        c.SwaggerDoc("v1", new OpenApiInfo
+        {
+            Version = "v1",
+            Title = "UserApi",
+            Description = "This api handles all users",
+        });
+        // Use the existing XML file without modifying it during build
+        var xmlFileName = "UserApi.xml";
+        var xmlFilePath = Path.Combine(AppContext.BaseDirectory, xmlFileName);
+
+        Console.WriteLine($"XML file path: {xmlFilePath}");
+        if (File.Exists(xmlFilePath))
+        {
+            Console.WriteLine($"Using XML file for Swagger documentation: {xmlFilePath}");
+            c.IncludeXmlComments(xmlFilePath);
+        }
+        else
+        {
+            Console.WriteLine($"XML file not found: {xmlFilePath}");
+        }
     });
+
 
 var app = builder.Build();
 
@@ -41,7 +68,12 @@ var app = builder.Build();
 //if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "UserApi V1");
+        // Uncomment the line below if you want to enable Swagger UI at the root URL
+        // c.RoutePrefix = string.Empty;
+    });
 }
 
 app.UseCors(config => config

@@ -1,0 +1,16 @@
+<doc>
+	<assembly>
+		<name>UserApi</name>
+	</assembly>
+	<members>
+		<member name="M:UserApi.Controllers.UserController.GetUsers">
+			<summary>
+				Gets a list of all users.
+			</summary>
+			<returns>
+				An enumerable collection of <see cref="MyUserDto"/>.
+			</returns>
+		</member>
+		<!-- Other members go here -->
+	</members>
+</doc>

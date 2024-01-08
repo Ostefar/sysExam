@@ -28,8 +28,8 @@ namespace UserApi.Controllers
         }
 
         [HttpGet(Name = "GetUsers")]
-        [SwaggerOperation(Summary = "Gets a list of all users")]
-        [SwaggerResponse(StatusCodes.Status200OK, "Request Successfull", typeof(IEnumerable<MyUserDto>))]
+        /*[SwaggerOperation(Summary = "Gets a list of all users")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Request Successfull", typeof(IEnumerable<MyUserDto>))]*/
         public async Task<IEnumerable<MyUserDto>> GetUsers()
         {
             var userDtoList = new List<MyUserDto>();
