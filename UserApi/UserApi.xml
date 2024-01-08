@@ -7,9 +7,9 @@
 			<summary>
 				Gets a list of all users.
 			</summary>
-			<returns>
-				An enumerable collection of <see cref="MyUserDto"/>.
-			</returns>
+			<response code="200">
+				Returns a list of Users of type MyUserDto Schema
+			</response>
 		</member>
 
 		<member name="M:UserApi.Controllers.UserController.GetUser(System.Int32)">
@@ -17,9 +17,12 @@
 				Gets a specific user.
 			</summary>
 			<param name="id">The user ID.</param>
-			<returns>
-				An IActionResult representing the user information.
-			</returns>
+			<response code="200">
+				Returns a User of type MyUserDto Schema
+			</response>
+			<response code="404">
+				Requested ID not found
+			</response>
 		</member>
 
 		<member name="M:UserApi.Controllers.UserController.PostAsync(SharedModels.MyUserDto)">
@@ -44,6 +47,12 @@
 						"tasksMoved": 0
 					}
 			</remarks>
+			<response code="201">
+				Succesfully created User of type MyUserDto Schema
+			</response>
+			<response code="400">
+				Badrequest
+			</response>
 		</member>
 
 		<member name="M:UserApi.Controllers.UserController.PutAsync(System.Int32,SharedModels.MyUserDto)">
@@ -68,6 +77,15 @@
 						"phone": "45454545"
 					}
 			</remarks>
+			<response code="204">
+                Successfully updated the User
+            </response>
+            <response code="400">
+                Badrequest
+            </response>
+			<response code="404">
+				Requested ID not found
+			</response>
 		</member>
 
 		<member name="M:UserApi.Controllers.UserController.DeleteAsync(System.Int32)">
@@ -76,8 +94,14 @@
 			</summary>
 			<param name="id">The user ID to delete.</param>
 			<returns>
-				An IActionResult representing the success of the request.
+				An IActionResult representing the success of the request. 
 			</returns>
+			<response code="204">
+				Successfully deleted the User
+			</response>
+			<response code="404">
+				Requested ID not found - For more information, refer to <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"> 404 status code</a>
+			</response>
 		</member>
 	</members>
 </doc>
