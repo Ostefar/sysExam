@@ -11,6 +11,46 @@
 				An enumerable collection of <see cref="MyUserDto"/>.
 			</returns>
 		</member>
-		<!-- Other members go here -->
+
+		<member name="M:UserApi.Controllers.UserController.GetUser(System.Int32)">
+			<summary>
+				Gets a specific user.
+			</summary>
+			<param name="id">The user ID.</param>
+			<returns>
+				An IActionResult representing the user information.
+			</returns>
+		</member>
+
+		<member name="M:UserApi.Controllers.UserController.PostAsync(SharedModels.MyUserDto)">
+			<summary>
+				Create a new user.
+			</summary>
+			<param name="userDto">The user data to create.</param>
+			<returns>
+				An IActionResult representing the success of the request.
+			</returns>
+		</member>
+
+		<member name="M:UserApi.Controllers.UserController.PutAsync(System.Int32,SharedModels.MyUserDto)">
+			<summary>
+				Update an existing user.
+			</summary>
+			<param name="id">The user ID to update.</param>
+			<param name="userDto">The updated user data.</param>
+			<returns>
+				An IActionResult representing the success of the request.
+			</returns>
+		</member>
+
+		<member name="M:UserApi.Controllers.UserController.DeleteAsync(System.Int32)">
+			<summary>
+				Delete an existing user.
+			</summary>
+			<param name="id">The user ID to delete.</param>
+			<returns>
+				An IActionResult representing the success of the request.
+			</returns>
+		</member>
 	</members>
 </doc>
