@@ -30,6 +30,20 @@
 			<returns>
 				An IActionResult representing the success of the request.
 			</returns>
+			<remarks>
+				Sample request:
+
+					POST /User
+					{
+						"firstName": "TestName",
+						"lastName": "TestLastName",
+						"userName": "sysInt",
+						"password": "1234",
+						"email": "test@email.dk",
+						"phone": "45454545",
+						"tasksMoved": 0
+					}
+			</remarks>
 		</member>
 
 		<member name="M:UserApi.Controllers.UserController.PutAsync(System.Int32,SharedModels.MyUserDto)">
@@ -41,6 +55,19 @@
 			<returns>
 				An IActionResult representing the success of the request.
 			</returns>
+			<remarks>
+				Sample request:
+
+					PUT /User
+					{
+						"firstName": "TestName",
+						"lastName": "TestLastName",
+						"userName": "sysInt",
+						"password": "1234",
+						"email": "test@email.dk",
+						"phone": "45454545"
+					}
+			</remarks>
 		</member>
 
 		<member name="M:UserApi.Controllers.UserController.DeleteAsync(System.Int32)">
