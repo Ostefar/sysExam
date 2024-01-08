@@ -28,14 +28,6 @@ builder.Services.AddSingleton<IConverter<MyUser, MyUserDto>, UserConverter>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-/*builder.Services.AddSwaggerGen(
-    c =>
-    {
-        c.EnableAnnotations();
-        c.SwaggerDoc("v1", new OpenApiInfo { Title = "UserApi", Version = "v1" });
-    });*/
-
-
 
     builder.Services.AddSwaggerGen(c =>
     {
@@ -48,17 +40,9 @@ builder.Services.AddEndpointsApiExplorer();
         // Use the existing XML file without modifying it during build
         var xmlFileName = "UserApi.xml";
         var xmlFilePath = Path.Combine(AppContext.BaseDirectory, xmlFileName);
+        c.IncludeXmlComments(xmlFilePath);
+        c.EnableAnnotations();
 
-        Console.WriteLine($"XML file path: {xmlFilePath}");
-        if (File.Exists(xmlFilePath))
-        {
-            Console.WriteLine($"Using XML file for Swagger documentation: {xmlFilePath}");
-            c.IncludeXmlComments(xmlFilePath);
-        }
-        else
-        {
-            Console.WriteLine($"XML file not found: {xmlFilePath}");
-        }
     });
 
 

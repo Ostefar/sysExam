@@ -28,8 +28,6 @@ namespace UserApi.Controllers
         }
 
         [HttpGet(Name = "GetUsers")]
-        /*[SwaggerOperation(Summary = "Gets a list of all users")]
-        [SwaggerResponse(StatusCodes.Status200OK, "Request Successfull", typeof(IEnumerable<MyUserDto>))]*/
         public async Task<IEnumerable<MyUserDto>> GetUsers()
         {
             var userDtoList = new List<MyUserDto>();
@@ -42,8 +40,6 @@ namespace UserApi.Controllers
         }
 
         [HttpGet("{id}", Name = "GetUser")]
-        [SwaggerOperation(Summary = "Gets a specific user")]
-        [SwaggerResponse(StatusCodes.Status200OK, "Request Successfull")]
         public async Task<IActionResult> GetUser(int id)
         {
             var user = await repository.GetAsync(id);
@@ -56,8 +52,6 @@ namespace UserApi.Controllers
         }
 
         [HttpPost(Name = "CreateUser")]
-        [SwaggerOperation(Summary = "Create a new user")]
-        [SwaggerResponse(StatusCodes.Status200OK, "Request Successfull")]
         public async Task<IActionResult> PostAsync([FromBody] MyUserDto userDto)
         {
             if (userDto == null)
@@ -73,8 +67,6 @@ namespace UserApi.Controllers
         }
 
         [HttpPut("{id}", Name = "UpdateUser")]
-        [SwaggerOperation(Summary = "Update an existing user")]
-        [SwaggerResponse(StatusCodes.Status204NoContent, "Request Successfull")]
         public async Task<IActionResult> PutAsync(int id, [FromBody] MyUserDto userDto)
         {
             if (userDto == null || userDto.Id != id)
@@ -101,8 +93,6 @@ namespace UserApi.Controllers
         }
 
         [HttpDelete("{id}", Name = "DeleteUser")]
-        [SwaggerOperation(Summary = "Delete an existing user")]
-        [SwaggerResponse(StatusCodes.Status204NoContent, "Request Successfull")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
             if (await repository.GetAsync(id) == null)
